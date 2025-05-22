@@ -68,9 +68,13 @@
 
 ## Author
 
-This project is created by [Javayhu](https://x.com/javay_hu), the founder of [Mkdirs](https://mkdirs.com), which is the best directory boilerplate for anyone who wants to launch a profitable directory website in minutes.
+This project is created by [Fox](https://x.com/indie_maker_fox), the founder of [Mkdirs](https://mkdirs.com) and [MkSaaS](https://mksaas.com).
 
-If you are interested in indie hacking, please follow me on X: [@javay_hu](https://x.com/javay_hu) or BlueSky: [@javayhu.com](https://bsky.app/profile/javayhu.com)
+[Mkdirs](https://mkdirs.com) is the best directory boilerplate for anyone who wants to launch a profitable directory website in minutes.
+
+[MkSaaS](https://mksaas.com) is the best AI SaaS boilerplate, you can launch your next AI SaaS in a weekend with MkSaaS template.
+
+If you are interested in indie hacking, please follow me on X: [@javay_hu](https://x.com/indie_maker_fox) or BlueSky: [@javayhu.com](https://bsky.app/profile/mksaas.me)
 
 ### Compare with Mkdirs
 
