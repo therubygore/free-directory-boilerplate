@@ -74,7 +74,7 @@ This project is created by [Fox](https://x.com/indie_maker_fox), the founder of 
 
 [MkSaaS](https://mksaas.com) is the best AI SaaS boilerplate, you can launch your next AI SaaS in a weekend with MkSaaS template.
 
-If you are interested in indie hacking, please follow me on X: [@javay_hu](https://x.com/indie_maker_fox) or BlueSky: [@javayhu.com](https://bsky.app/profile/mksaas.me)
+If you are interested in indie hacking, please follow me on X: [@indie_maker_fox](https://x.com/indie_maker_fox) or BlueSky: [@mksaas.me](https://bsky.app/profile/mksaas.me)
 
 ### Compare with Mkdirs
 
