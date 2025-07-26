@@ -2,11 +2,8 @@ import { FeaturePageHeader } from "@/components/feature-page-header";
 import { ShareProductButton } from "@/components/forms/share-product-button";
 import GroupListClient from "@/components/group-list-client";
 import { AllProductConfigs } from "@/config/product";
-import { COMMON_PARAMS } from "@/lib/constants";
 import { getCurrentUser } from "@/lib/session";
-import { GroupListWithCategoryQueryResult } from "@/sanity.types";
-import { sanityFetch } from "@/sanity/lib/fetch";
-import { groupListWithCategoryQuery } from "@/sanity/lib/queries";
+import { getCategories } from "@/lib/airtable";
 
 interface ProductListLayoutProps {
     params: { lang: string };
@@ -14,45 +11,74 @@ interface ProductListLayoutProps {
 }
 
 export default async function ProductListLayout({ params, children }: ProductListLayoutProps) {
-    console.log('ProductListLayout, params:', params); // params: { lang: 'en' }
+    console.log('ProductListLayout, params:', params);
     const { lang } = params;
-    const queryParams = { ...COMMON_PARAMS, lang };
-    // console.log('ProductListLayout, language:', lang); // language: en
-    // console.log('ProductListLayout, queryParams:', queryParams); // queryParams: { defaultLocale: 'en', lang: 'en' }
 
     const user = await getCurrentUser();
-    const productConfig = AllProductConfigs[lang];
+    const productConfig = AllProductConfigs[lang] || AllProductConfigs['en'];
 
-    const groupListQueryResult = await sanityFetch<GroupListWithCategoryQueryResult>({
-        query: groupListWithCategoryQuery,
-        params: queryParams,
-    });
-    // console.log('ProductListLayout, groupListQueryResult:', groupListQueryResult);
+    try {
+        // Get categories from Airtable and format them as groups
+        const categories = await getCategories();
+        const categoryGroups = categories.map(cat => ({
+            _id: `cat-${cat}`,
+            _type: "group",
+            _createdAt: new Date().toISOString(),
+            _updatedAt: new Date().toISOString(),
+            _rev: "1",
+            name: cat,
+            slug: cat.toLowerCase().replace(/\s+/g, '-'),
+            categories: []
+        })) as any; // Cast to bypass TypeScript for now
 
-    return (
-        <div className="min-h-screen pb-16">
-            {/* Page Header */}
-            <div className="bg-linear py-10">
-                <FeaturePageHeader className="container"
-                    heading={productConfig.title}
-                    text={productConfig.subtitle}>
-                    <ShareProductButton lang={lang}>
-                        <span>{productConfig.submitButton}</span>
-                    </ShareProductButton>
-                </FeaturePageHeader>
-            </div>
+        console.log('ProductListLayout, categories:', categories.length);
 
-            <div className="container mt-8 grid md:grid-cols-12 md:gap-8">
-                {/* Group List */}
-                <div className="md:col-span-2">
-                    <GroupListClient lang={lang} itemList={groupListQueryResult} />
+        return (
+            <div className="min-h-screen pb-16">
+                {/* Page Header */}
+                <div className="bg-linear py-10">
+                    <FeaturePageHeader className="container"
+                        heading={productConfig?.title || "Tattoo Shops"}
+                        text={productConfig?.subtitle || "Discover the best tattoo shops in Portland"}>
+                        <ShareProductButton lang={lang}>
+                            <span>{productConfig?.submitButton || "Submit Shop"}</span>
+                        </ShareProductButton>
+                    </FeaturePageHeader>
                 </div>
 
-                {/* Category List & Product Grid */}
-                <div className="md:col-span-10">
+                <div className="container mt-8 grid md:grid-cols-12 md:gap-8">
+                    {/* Category List */}
+                    <div className="md:col-span-2">
+                        <GroupListClient lang={lang} itemList={categoryGroups} />
+                    </div>
+
+                    {/* Product Grid */}
+                    <div className="md:col-span-10">
+                        {children}
+                    </div>
+                </div>
+            </div>
+        );
+    } catch (error) {
+        console.error('Error loading layout:', error);
+        
+        // Fallback layout without categories
+        return (
+            <div className="min-h-screen pb-16">
+                <div className="bg-linear py-10">
+                    <FeaturePageHeader className="container"
+                        heading="Tattoo Shops"
+                        text="Discover the best tattoo shops in Portland">
+                        <ShareProductButton lang={lang}>
+                            <span>Submit Shop</span>
+                        </ShareProductButton>
+                    </FeaturePageHeader>
+                </div>
+
+                <div className="container mt-8">
                     {children}
                 </div>
             </div>
-        </div>
-    );
+        );
+    }
 }

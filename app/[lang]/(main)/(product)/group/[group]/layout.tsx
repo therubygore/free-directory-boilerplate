@@ -1,9 +1,5 @@
 import CategoryListClient from "@/components/category-list-client";
-import { COMMON_PARAMS } from "@/lib/constants";
-import { GroupQueryResult } from "@/sanity.types";
-import { sanityFetch } from "@/sanity/lib/fetch";
-import { groupQuery } from "@/sanity/lib/queries";
-import { notFound } from "next/navigation";
+import { getCategories } from "@/lib/airtable";
 
 interface ProductGroupLayoutProps {
     params: { lang: string; group: string };
@@ -11,33 +7,55 @@ interface ProductGroupLayoutProps {
 }
 
 export default async function ProductGroupLayout({ params, children }: ProductGroupLayoutProps) {
-    console.log('ProductGroupLayout, params:', params); // params: { lang: 'en', group: 'xxx' }
-    const { lang, group } = params;
-    const queryParams = { ...COMMON_PARAMS, lang };
-    // console.log('ProductGroupLayout, language:', lang); // language: en
-    // console.log('ProductGroupLayout, queryParams:', queryParams); // queryParams: { defaultLocale: 'en', lang: 'en' }
+    console.log('ProductGroupLayout, params:', params);
+    const { lang } = params;
 
-    const groupQueryResult = await sanityFetch<GroupQueryResult>({
-        query: groupQuery,
-        params: {
-            ...queryParams,
-            slug: group,
-        },
-    });
+    try {
+        // Get categories from Airtable
+        const categories = await getCategories();
+        console.log('ProductGroupLayout, categories:', categories.length);
 
-    // console.log('ProductGroupLayout, groupQueryResult:', groupQueryResult);
-    if (!groupQueryResult) {
-        console.error('ProductGroupLayout, group not found:', group);
-        return notFound();
+        // Convert categories to the format expected by CategoryListClient
+        const categoryData = {
+            _id: "group-tattoo",
+            _type: "group" as const,
+            _createdAt: new Date().toISOString(),
+            _updatedAt: new Date().toISOString(),
+            _rev: "1",
+            name: "Tattoo Categories",
+            slug: "tattoo",
+            order: 0,
+            date: new Date().toISOString(),
+            categories: categories.map(cat => ({
+                _id: `cat-${cat}`,
+                _type: "category" as const,
+                _createdAt: new Date().toISOString(),
+                _updatedAt: new Date().toISOString(),
+                _rev: "1",
+                name: cat,
+                slug: cat.toLowerCase().replace(/\s+/g, '-'),
+                order: 0,
+                date: new Date().toISOString()
+            }))
+        };
+
+        return (
+            <div className="grid space-y-8">
+                {/* Category List */}
+                <CategoryListClient lang={lang} group={categoryData} />
+
+                {/* Product Grid */}
+                {children}
+            </div>
+        );
+    } catch (error) {
+        console.error('Error loading categories:', error);
+        
+        // Fallback - just show children without categories
+        return (
+            <div className="grid space-y-8">
+                {children}
+            </div>
+        );
     }
-
-    return (
-        <div className="grid space-y-8">
-            {/* Category List */}
-            <CategoryListClient lang={lang} group={groupQueryResult} />
-
-            {/* Product Grid */}
-            {children}
-        </div>
-    );
 }

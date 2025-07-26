@@ -1,20 +1,16 @@
 import { env } from "@/env.mjs";
 import { type MetadataRoute } from 'next';
 import { i18n } from "../i18n-config";
-import { sanityFetch } from "@/sanity/lib/fetch";
-import { AppListQueryForSitemapResult, AppTypeListQueryForSitemapResult, CategoryListQueryForSitemapResult, ProductListQueryForSitemapResult } from "@/sanity.types";
-import { appListQueryForSitemap, appTypeListQueryForSitemap, categoryListQueryForSitemap, productListQueryForSitemap } from "@/sanity/lib/queries";
+import { getAirtableListings, getCategories } from "@/lib/airtable";
 
 const site_url = env.NEXT_PUBLIC_APP_URL;
 
-// https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap
-// https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap#generate-a-localized-sitemap
-// https://nextjs.org/docs/app/api-reference/functions/generate-sitemaps
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.log('sitemap start');
 
     const sitemapList: MetadataRoute.Sitemap = []; // final result
 
+    // Static routes
     const sitemapRoutes: MetadataRoute.Sitemap = [
         {
             url: '', // home
@@ -24,12 +20,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         },
         {
             url: 'dashboard/submit',
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 1,
-        },
-        {
-            url: 'dashboard/app',
             lastModified: new Date(),
             changeFrequency: 'weekly',
             priority: 1,
@@ -54,6 +44,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         },
     ];
 
+    // Add static routes for each locale
     sitemapRoutes.forEach((route) => {
         i18n.locales.forEach((locale) => {
             const lang = `/${locale}`;
@@ -66,86 +57,55 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         })
     })
 
-    const [appListQueryResult, appTypeListQueryResult,
-        categoryListQueryResult, productListQueryResult] = await Promise.all([
-            sanityFetch<AppListQueryForSitemapResult>({
-                query: appListQueryForSitemap,
-            }),
-            sanityFetch<AppTypeListQueryForSitemapResult>({
-                query: appTypeListQueryForSitemap,
-            }),
-            sanityFetch<CategoryListQueryForSitemapResult>({
-                query: categoryListQueryForSitemap,
-            }),
-            sanityFetch<ProductListQueryForSitemapResult>({
-                query: productListQueryForSitemap,
-            }),
+    try {
+        // Get data from Airtable
+        const [listings, categories] = await Promise.all([
+            getAirtableListings({ status: 'Published' }),
+            getCategories(),
         ]);
 
-    console.log('sitemap, appListQueryResult size:', appListQueryResult.length);
-    console.log('sitemap, appTypeListQueryResult size:', appTypeListQueryResult.length);
-    console.log('sitemap, categoryListQueryResult size:', categoryListQueryResult.length);
-    console.log('sitemap, productListQueryResult size:', productListQueryResult.length);
+        console.log('sitemap, listings size:', listings.length);
+        console.log('sitemap, categories size:', categories.length);
 
-    appListQueryResult.forEach((app) => {
-        i18n.locales.forEach((locale) => {
-            const lang = `/${locale}`;
-            if (app.name) {
-                const routeUrl = `/app/${encodeURIComponent(app.name)}`;
+        // Add listing pages
+        listings.forEach((listing) => {
+            i18n.locales.forEach((locale) => {
+                const lang = `/${locale}`;
+                if (listing.slug) {
+                    const routeUrl = `/listing/${listing.slug}`;
+                    console.log(`sitemap, url:${site_url}${lang}${routeUrl}`);
+                    sitemapList.push({
+                        url: `${site_url}${lang}${routeUrl}`,
+                        lastModified: new Date(),
+                        changeFrequency: 'weekly',
+                        priority: 0.9,
+                    });
+                } else {
+                    console.warn(`sitemap, slug invalid, id:${listing.id}`);
+                }
+            })
+        })
+
+        // Add category pages
+        categories.forEach((category) => {
+            i18n.locales.forEach((locale) => {
+                const lang = `/${locale}`;
+                // Create a slug from category name (replace spaces with hyphens, lowercase)
+                const categorySlug = category.toLowerCase().replace(/\s+/g, '-');
+                const routeUrl = `/category/${categorySlug}`;
                 console.log(`sitemap, url:${site_url}${lang}${routeUrl}`);
                 sitemapList.push({
                     url: `${site_url}${lang}${routeUrl}`,
                     lastModified: new Date(),
-                    changeFrequency: 'daily',
-                    priority: 1,
+                    changeFrequency: 'weekly',
+                    priority: 0.7,
                 });
-            } else {
-                console.warn(`sitemap, name invalid, id:${app._id}`);
-            }
+            })
         })
-    })
 
-    appTypeListQueryResult.forEach((apptype) => {
-        i18n.locales.forEach((locale) => {
-            const lang = `/${locale}`;
-            const routeUrl = `/apptype/${apptype.slug}`;
-            console.log(`sitemap, url:${site_url}${lang}${routeUrl}`);
-            sitemapList.push({
-                url: `${site_url}${lang}${routeUrl}`,
-                lastModified: new Date(),
-                changeFrequency: 'daily',
-                priority: 1,
-            });
-        })
-    })
-
-    categoryListQueryResult.forEach((category) => {
-        i18n.locales.forEach((locale) => {
-            const lang = `/${locale}`;
-            const routeUrl = `/group/${category.group?.slug}/category/${category.slug}`;
-            console.log(`sitemap, url:${site_url}${lang}${routeUrl}`);
-            sitemapList.push({
-                url: `${site_url}${lang}${routeUrl}`,
-                lastModified: new Date(),
-                changeFrequency: 'daily',
-                priority: 1,
-            });
-        })
-    })
-
-    productListQueryResult.forEach((product) => {
-        i18n.locales.forEach((locale) => {
-            const lang = `/${locale}`;
-            const routeUrl = `/product/${product.slug}`;
-            console.log(`sitemap, url:${site_url}${lang}${routeUrl}`);
-            sitemapList.push({
-                url: `${site_url}${lang}${routeUrl}`,
-                lastModified: new Date(),
-                changeFrequency: 'daily',
-                priority: 1,
-            });
-        })
-    })
+    } catch (error) {
+        console.error('Error generating sitemap:', error);
+    }
 
     console.log('sitemap end, size:', sitemapList.length);
     return sitemapList;

@@ -11,7 +11,6 @@ import { UserAccountNav } from "@/components/layout/user-account-nav";
 import { Icons } from "@/components/shared/icons";
 import { AllAuthConfigs } from "@/config/auth";
 import { useSession } from "next-auth/react";
-import { LanguageSwitcher } from "./language-switcher";
 
 interface NavBarProps {
   lang: string;
@@ -61,7 +60,6 @@ export function NavBar({
             </Button>
           ) : null}
 
-          <LanguageSwitcher />
           <ModeToggle />
         </div>
       </div>

@@ -2,66 +2,50 @@ import { notFound } from "next/navigation";
 
 import { DashboardHeader } from "@/components/dashboard/header";
 import { DashboardShell } from "@/components/dashboard/shell";
-import { SubmitApplicationForm } from "@/components/forms/submit-application-form";
-import { AllSubmitAppConfigs } from "@/config/submit-app";
-import { COMMON_PARAMS } from "@/lib/constants";
+import { SubmitListingForm } from "@/components/forms/submit-listing-form";
+import { getAllSubmitConfigs } from "@/config/submit-app";
 import { getCurrentUser } from "@/lib/session";
-import { AppTypeListQueryResult, UserQueryResult } from "@/sanity.types";
-import { sanityFetch } from "@/sanity/lib/fetch";
-import { appTypeListQuery, userQuery } from "@/sanity/lib/queries";
+import { getCategories } from "@/lib/airtable";
 
 export const metadata = {
-  title: "Submit Application",
-  description: "Submit your indie applications to share.",
+  title: "Submit Tattoo Shop",
+  description: "Submit your tattoo shop to the PDX Tattoo Directory.",
 }
 
-export default async function SubmitApplicationPage({ params }: { params: { lang: string }; }) {
+export default async function SubmitListingPage({ params }: { params: { lang: string }; }) {
   const { lang } = params;
-  const pageConfig = AllSubmitAppConfigs[lang];
-  console.log('AppListPage, lang:', lang);
-  // console.log('AppListPage, lang:', lang, 'pageConfig:', pageConfig);
-  const queryParams = { ...COMMON_PARAMS, lang };
-  // console.log('AppListPage, language:', lang); // language: en
-  // console.log('AppListPage, queryParams:', queryParams); // queryParams: { defaultLocale: 'en', lang: 'en' }
+  const pageConfig = getAllSubmitConfigs()[lang] || getAllSubmitConfigs()['en']; // fallback to English
+  console.log('SubmitListingPage, lang:', lang);
 
   const user = await getCurrentUser();
   if (!user) {
-    console.log("SubmitApplicationPage, user not found");
+    console.log("SubmitListingPage, user not found");
     return notFound();
   }
-  console.log('SubmitApplicationPage, userid:', user.id);
+  console.log('SubmitListingPage, userid:', user.id);
 
-  const [appTypeListQueryResult, userQueryResult] = await Promise.all([
-    sanityFetch<AppTypeListQueryResult>({
-      query: appTypeListQuery,
-      params: queryParams,
-    }),
-    sanityFetch<UserQueryResult>({
-      query: userQuery,
-      params: {
-        userId: user.id,
-      },
-      useCache: false,
-    }),
-  ]);
-  if (!userQueryResult) {
-    console.log("SubmitApplicationPage, userQueryResult not found");
+  try {
+    // Get categories from Airtable
+    const categories = await getCategories();
+    console.log('SubmitListingPage, categories:', categories.length);
+
+    return (
+      <DashboardShell>
+        <DashboardHeader
+          heading={pageConfig?.title || "Submit Tattoo Shop"}
+          text={pageConfig?.subtitle || "Add your tattoo shop to the PDX Tattoo Directory"}
+        />
+        <div className="grid gap-10">
+          <SubmitListingForm 
+            lang={lang}
+            user={{ id: user.id, name: user.name || "" }}
+            categories={categories}
+          />
+        </div>
+      </DashboardShell>
+    )
+  } catch (error) {
+    console.error('Error loading submit page:', error);
     return notFound();
   }
-  console.log('SubmitApplicationPage, sanityUser id:', userQueryResult._id, ' name:', userQueryResult.name);
-
-  return (
-    <DashboardShell>
-      <DashboardHeader
-        heading={pageConfig.title}
-        text={pageConfig.subtitle}
-      />
-      <div className="grid gap-10">
-        <SubmitApplicationForm lang={lang}
-          user={{ id: user.id, name: user.name || "" }}
-          appTypeList={appTypeListQueryResult}
-          sanityUser={userQueryResult} />
-      </div>
-    </DashboardShell>
-  )
 }

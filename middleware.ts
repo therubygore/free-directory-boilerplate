@@ -10,7 +10,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { i18n } from "./i18n-config";
 
-import { env } from "process";
+import { env } from "@/env.mjs";
 import authConfig from "./auth.config";
 
 function getLocale(request: NextRequest): string | undefined {

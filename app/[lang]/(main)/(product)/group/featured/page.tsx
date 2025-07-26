@@ -1,28 +1,26 @@
-import ProductGridCient from "@/components/product-grid-client";
-import { AllSiteConfigs } from "@/config/site";
-import { COMMON_PARAMS } from "@/lib/constants";
-import { ProductListOfFeaturedQueryResult } from "@/sanity.types";
-import { sanityFetch } from "@/sanity/lib/fetch";
-import { productListOfFeaturedQuery } from "@/sanity/lib/queries";
+import ProductGridClient from "@/components/product-grid-client";
+import { getAllSiteConfigs } from "@/config/site";
+import { getListingsForUI } from "@/lib/airtable";
 import { Metadata } from "next";
 
 interface FeaturedPageProps {
     params: { lang: string; };
 }
 
-// https://nextjs.org/docs/app/api-reference/functions/generate-metadata
+// Generate metadata for the featured page
 export async function generateMetadata({
     params,
 }: FeaturedPageProps): Promise<Metadata> {
     const { lang } = params;
     console.log('generateMetadata, lang:', lang);
-    const siteConfig = AllSiteConfigs[lang];
-    const currentUrl = `${siteConfig.url}/${lang}/group/featured`;
-    const canonicalUrl = `${siteConfig.url}/en/group/featured`;
+    
+    const siteConfig = getAllSiteConfigs()[lang] || getAllSiteConfigs()['en'];
+    const currentUrl = `${siteConfig?.url}/${lang}/featured`;
+    const canonicalUrl = `${siteConfig?.url}/en/featured`;
 
     return {
-        title: "Featured",
-        description: siteConfig.description,
+        title: `Featured Tattoo Shops - ${siteConfig?.name}`,
+        description: `Discover our featured tattoo shops in Portland. ${siteConfig?.description}`,
         alternates: {
             canonical: canonicalUrl,
         },
@@ -30,21 +28,27 @@ export async function generateMetadata({
 }
 
 export default async function FeaturedPage({ params }: FeaturedPageProps) {
-    // console.log('FeaturedPage, params:', params); // params: { lang: 'en' }
+    console.log('FeaturedPage, params:', params);
     const { lang } = params;
-    const queryParams = { ...COMMON_PARAMS, lang };
-    // console.log('FeaturedPage, language:', lang); // language: en
-    // console.log('FeaturedPage, queryParams:', queryParams); // queryParams: { defaultLocale: 'en', lang: 'en' }
 
-    const productListQueryResult = await sanityFetch<ProductListOfFeaturedQueryResult>({
-        query: productListOfFeaturedQuery,
-        params: {
-            ...queryParams,
+    try {
+        // Get all published listings from Airtable (Featured field not available yet)
+        const listings = await getListingsForUI({ 
+            status: 'Published',
             limit: 48
-        }
-    });
+        });
 
-    return (
-        <ProductGridCient lang={lang} itemList={productListQueryResult} />
-    );
+        console.log('FeaturedPage, featured listings:', listings.length);
+
+        return (
+            <ProductGridClient lang={lang} itemList={listings} />
+        );
+    } catch (error) {
+        console.error('Error loading featured listings:', error);
+        
+        // Return empty state on error
+        return (
+            <ProductGridClient lang={lang} itemList={[]} />
+        );
+    }
 }

@@ -25,7 +25,7 @@ export async function generateMetadata({
   params,
 }: { params: { lang: Locale } }): Promise<Metadata> {
   const { lang } = params;
-  const siteConfig = AllSiteConfigs[lang];
+  const siteConfig = AllSiteConfigs[lang] || AllSiteConfigs['en'];
 
   return {
     title: {

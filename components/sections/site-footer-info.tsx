@@ -66,36 +66,6 @@ export function SiteFooterInfo({ lang }: SiteFooterInfoProps) {
             </Link>
           </Button>
         </div>
-
-        <div className="mt-4 inline-block">
-          <a href="https://www.uneed.best/tool/indie-hackers"
-            target="_blank"
-          >
-            <Image 
-              src="https://www.uneed.best/POTD1.png"
-              alt="Uneed POTD1 Badge"
-              className="max-w-[250px]"
-              width={639}
-              height={171}
-            />
-          </a>
-        </div>
-
-        <br/>
-
-        <div className="mt-4 inline-block">
-          <a href="https://devhunt.org/tool/indie-hackers"
-            target="_blank"
-          >
-            <Image 
-              src="/images/devhunt-1st.png"
-              alt="DevHunt 1st Tool of the Week Badge"
-              className="max-w-[250px]"
-              width={988}
-              height={240}
-            />
-          </a>
-        </div>
       </div>
 
     </section>

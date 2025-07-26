@@ -1,50 +1,64 @@
-import ProductGridCient from "@/components/product-grid-client";
+import ProductGridClient from "@/components/product-grid-client";
 import { AllSiteConfigs } from "@/config/site";
-import { COMMON_PARAMS } from "@/lib/constants";
-import { ProductListOfRecentQueryResult } from "@/sanity.types";
-import { sanityFetch } from "@/sanity/lib/fetch";
-import { productListOfRecentQuery } from "@/sanity/lib/queries";
+import { getListingsForUI } from "@/lib/airtable";
 import { Metadata } from "next";
 
 interface NewPageProps {
-    params: { lang: string; };
+  params: { lang: string };
 }
 
-// https://nextjs.org/docs/app/api-reference/functions/generate-metadata
+// Generate metadata for the new listings page
 export async function generateMetadata({
-    params,
+  params,
 }: NewPageProps): Promise<Metadata> {
-    const { lang } = params;
-    console.log('generateMetadata, lang:', lang);
-    const siteConfig = AllSiteConfigs[lang];
-    const currentUrl = `${siteConfig.url}/${lang}/group/new`;
-    const canonicalUrl = `${siteConfig.url}/en/group/new`;
+  const { lang } = params;
+  
+  const siteConfig = AllSiteConfigs[lang] || AllSiteConfigs['en'];
+  const currentUrl = `${siteConfig?.url}/${lang}/new`;
+  const canonicalUrl = `${siteConfig?.url}/en/new`;
 
-    return {
-        title: "New",
-        description: siteConfig.description,
-        alternates: {
-            canonical: canonicalUrl,
-        },
-    }
+  return {
+    title: `New Tattoo Shops - ${siteConfig?.name}`,
+    description: `Discover the newest tattoo shops in Portland. ${siteConfig?.description}`,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+  };
 }
 
 export default async function NewPage({ params }: NewPageProps) {
-    // console.log('NewPage, params:', params); // params: { lang: 'en' }
-    const { lang } = params;
-    const queryParams = { ...COMMON_PARAMS, lang };
-    // console.log('NewPage, language:', lang); // language: en
-    // console.log('NewPage, queryParams:', queryParams); // queryParams: { defaultLocale: 'en', lang: 'en' }
+  console.log('NewPage, params:', params);
+  const { lang } = params;
 
-    const productListQueryResult = await sanityFetch<ProductListOfRecentQueryResult>({
-        query: productListOfRecentQuery,
-        params: {
-            ...queryParams,
-            limit: 24
-        }
+  try {
+    console.log('NewPage: Starting to fetch listings...');
+    
+    // Get newest listings from Airtable in UI-compatible format
+    const listings = await getListingsForUI({ 
+      status: 'Published',
+      limit: 48
     });
-
+  
+    console.log('NewPage: Successfully fetched listings:', listings.length);
+    console.log('NewPage: First listing:', listings[0] ? listings[0].name : 'No listings');
+  
     return (
-        <ProductGridCient lang={lang} itemList={productListQueryResult} />
+      <div className="container mx-auto py-8">
+        <h1 className="text-3xl font-bold mb-6">New Tattoo Shops ({listings.length})</h1>
+        <ProductGridClient lang={lang} itemList={listings} />
+      </div>
     );
+  } catch (error) {
+    console.error('NewPage: Error loading new listings:', error);
+    console.error('NewPage: Error details:', error.message);
+    
+    // Return error state with debug info
+    return (
+      <div className="container mx-auto py-8">
+        <h1 className="text-3xl font-bold mb-6 text-red-600">Error Loading Listings</h1>
+        <p className="text-red-500">Error: {error.message}</p>
+        <ProductGridClient lang={lang} itemList={[]} />
+      </div>
+    );
+  }
 }

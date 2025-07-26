@@ -17,6 +17,12 @@ export const urlForImage = (source: any) => {
 };
 
 export const urlForImageWithSize = (source: any, width: number, height: number) => {
+  // If source has a direct URL (from Airtable), use it directly
+  if (source?.url && typeof source.url === 'string') {
+    return source.url;
+  }
+  
+  // Otherwise, use Sanity image processing
   return urlForImage(source)
     ?.height(height)
     .width(width)

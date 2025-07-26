@@ -36,3 +36,7 @@ export const AllShareResourceConfigs:{[key: string]: ShareResourceConfig} = {
     en: enShareResourceConfig,
     zh: zhShareResourceConfig,
 }
+
+export function getAllShareResourceConfigs() {
+    return AllShareResourceConfigs;
+}

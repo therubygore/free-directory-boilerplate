@@ -1,13 +1,9 @@
 import { notFound } from "next/navigation";
 
-import AppSingleClient from "@/components/app-single-client";
-import { AppQueryResult } from "@/sanity.types";
-import { sanityFetch } from "@/sanity/lib/fetch";
-import { appQuery } from "@/sanity/lib/queries";
-import { COMMON_PARAMS } from "@/lib/constants";
+import ProductSingleClient from "@/components/product-single-client";
+import { getListingForUIBySlug } from "@/lib/airtable";
 import { Metadata } from "next";
-import { AllSiteConfigs } from "@/config/site";
-import { urlForImageWithSize } from "@/sanity/lib/utils";
+import { getAllSiteConfigs } from "@/config/site";
 
 interface AppPageProps {
     params: {
@@ -16,82 +12,78 @@ interface AppPageProps {
     }
 }
 
-// https://nextjs.org/docs/app/api-reference/functions/generate-metadata
+// Generate metadata for the listing page
 export async function generateMetadata({
     params,
 }: AppPageProps): Promise<Metadata> {
     const { lang, app } = params;
     console.log('generateMetadata, lang:', lang, ', app', app);
-    // appSlug is url decoded from app
+    
+    // URL decode the app slug
     const appSlug = decodeURIComponent(app);
     console.log('generateMetadata, appSlug:', appSlug);
-    const queryParams = { ...COMMON_PARAMS, lang };
-    // console.log('generateMetadata, queryParams:', queryParams); // queryParams: { defaultLocale: 'en', lang: 'en' }
 
-    const appQueryResult = await sanityFetch<AppQueryResult>({
-        query: appQuery,
-        params: {
-            ...queryParams,
-            slug: appSlug,
-        },
-    });
-    console.log('AppPage, appQueryResult:', appQueryResult);
-    if (!appQueryResult) {
+    try {
+        const listing = await getListingForUIBySlug(appSlug);
+        console.log('AppPage, listing:', listing);
+        
+        if (!listing) {
+            return {};
+        }
+
+        const siteConfig = getAllSiteConfigs()[lang] || getAllSiteConfigs()['en'];
+        const currentUrl = `${siteConfig?.url}/${lang}/listing/${listing.slug}`;
+        const canonicalUrl = `${siteConfig?.url}/en/listing/${listing.slug}`;
+
+        return {
+            title: `${listing.name} - ${siteConfig?.name}`,
+            description: listing.desc || `${listing.name} tattoo shop in Portland`,
+            alternates: {
+                canonical: canonicalUrl,
+            },
+            openGraph: {
+                type: "website",
+                url: currentUrl,
+                title: listing.name,
+                images: listing.coverImage?.url ? [listing.coverImage.url] : [],
+                description: listing.desc || `${listing.name} tattoo shop in Portland`,
+            },
+            twitter: {
+                site: currentUrl,
+                card: "summary_large_image",
+                title: listing.name,
+                description: listing.desc || `${listing.name} tattoo shop in Portland`,
+                images: listing.coverImage?.url ? [listing.coverImage.url] : [],
+            },
+        }
+    } catch (error) {
+        console.error('Error generating metadata:', error);
         return {};
-    }
-
-    const siteConfig = AllSiteConfigs[lang];
-    const currentUrl = `${siteConfig.url}/${lang}/app/${appQueryResult.name}`;
-    const canonicalUrl = `${siteConfig.url}/en/app/${appQueryResult.name}`;
-    const ogImage = urlForImageWithSize(appQueryResult.cover, 960, 540);
-
-    return {
-        title: appQueryResult.name,
-        description: appQueryResult.description,
-        alternates: {
-            canonical: canonicalUrl,
-        },
-        openGraph: {
-            type: "website",
-            url: currentUrl,
-            title: appQueryResult.name,
-            images: [ogImage],
-            description: appQueryResult.description,
-          },
-          twitter: {
-            site: currentUrl,
-            card: "summary_large_image",
-            title: appQueryResult.name,
-            description: appQueryResult.description,
-            images: [ogImage],
-          },
     }
 }
 
-// https://nextjs.org/learn/dashboard-app/streaming
-// use loading.tsx instead of suspense here
+// Individual tattoo shop page
 export default async function AppPage({ params }: AppPageProps) {
     const { lang, app } = params;
     console.log('AppPage, lang:', lang, ', app:', app);
-    // appSlug is url decoded from app
+    
+    // URL decode the app slug
     const appSlug = decodeURIComponent(app);
     console.log('AppPage, appSlug:', appSlug);
-    const queryParams = { ...COMMON_PARAMS, lang };
-    // console.log('AppPage, queryParams:', queryParams); // queryParams: { defaultLocale: 'en', lang: 'en' }
 
-    const appQueryResult = await sanityFetch<AppQueryResult>({
-        query: appQuery,
-        params: {
-            ...queryParams,
-            slug: appSlug,
-        },
-    });
-    console.log('AppPage, appQueryResult:', appQueryResult);
-    if (!appQueryResult) {
+    try {
+        const listing = await getListingForUIBySlug(appSlug);
+        console.log('AppPage, listing:', listing);
+        
+        if (!listing) {
+            return notFound();
+        }
+
+        return (
+            <ProductSingleClient lang={lang} product={listing} />
+        );
+    } catch (error) {
+        console.error('Error loading listing:', error);
         return notFound();
     }
-
-    return (
-        <AppSingleClient lang={lang} app={appQueryResult} />
-    )
 }

@@ -41,3 +41,7 @@ export const AllSiteConfigs: {[key: string]: SiteConfig} = {
   en: enSiteConfig,
   zh: zhSiteConfig,
 }
+
+export function getAllSiteConfigs() {
+  return AllSiteConfigs;
+}

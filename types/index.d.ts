@@ -165,6 +165,32 @@ export type SubmitAppConfig = {
   }
 }
 
+export type SubmitListingConfig = {
+  title: string;
+  subtitle: string;
+  form: {
+    title: string;
+    name: string;
+    namePlaceHolder: string;
+    website: string;
+    websitePlaceHolder: string;
+    instagram: string;
+    instagramPlaceHolder: string;
+    bookingUrl: string;
+    bookingUrlPlaceHolder: string;
+    email: string;
+    emailPlaceHolder: string;
+    description: string;
+    descriptionPlaceHolder: string;
+    category: string;
+    submit: string;
+    submiting: string;
+    notice: string;
+    success: string;
+    error: string;
+  }
+}
+
 export type AppListConfig = {
   title: string;
   subtitle: string;

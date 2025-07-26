@@ -1,10 +1,6 @@
-import ApplicationGridCient from "@/components/app-grid-client";
-import { AllSiteConfigs } from "@/config/site";
-import { COMMON_PARAMS } from "@/lib/constants";
-import { ApplicationListByCategoryQueryResult, ApplicationListOfFeaturedQueryResult, ApplicationListOfRecentQueryResult, AppTypeQueryResult } from "@/sanity.types";
-import { sanityFetch } from "@/sanity/lib/fetch";
-import { applicationListByCategoryQuery, applicationListOfFeaturedQuery, applicationListOfRecentQuery, appTypeQuery } from "@/sanity/lib/queries";
-import { urlForImageWithSize } from "@/sanity/lib/utils";
+import ProductGridClient from "@/components/product-grid-client";
+import { getAllSiteConfigs } from "@/config/site";
+import { getListingsForUI } from "@/lib/airtable";
 import { Metadata } from "next";
 
 interface AppTypePageProps {
@@ -14,34 +10,26 @@ interface AppTypePageProps {
     }
 }
 
-// https://nextjs.org/docs/app/api-reference/functions/generate-metadata
+// Generate metadata for the app type page
 export async function generateMetadata({
     params,
 }: AppTypePageProps): Promise<Metadata> {
     const { lang, type } = params;
     console.log('generateMetadata, lang:', lang, ', type:', type);
-    const queryParams = { ...COMMON_PARAMS, lang };
-    // console.log('generateMetadata, queryParams:', queryParams); // queryParams: { defaultLocale: 'en', lang: 'en' }
 
-    const appTypeQueryResult = await sanityFetch<AppTypeQueryResult>({
-        query: appTypeQuery,
-        params: {
-            ...queryParams,
-            slug: type,
-        },
-    });
-    console.log('generateMetadata, appTypeQueryResult:', appTypeQueryResult);
-    if (!appTypeQueryResult) {
-        return {};
-    }
-
-    const siteConfig = AllSiteConfigs[lang];
-    const currentUrl = `${siteConfig.url}/${lang}/apptype/${type}`;
-    const canonicalUrl = `${siteConfig.url}/en/apptype/${type}`;
+    const siteConfig = getAllSiteConfigs()[lang] || getAllSiteConfigs()['en'];
+    
+    // Convert type to readable name
+    const typeName = type === 'featured' ? 'Featured' : 
+                    type === 'new' ? 'New' : 
+                    type.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    
+    const currentUrl = `${siteConfig?.url}/${lang}/type/${type}`;
+    const canonicalUrl = `${siteConfig?.url}/en/type/${type}`;
 
     return {
-        title: appTypeQueryResult.name,
-        description: siteConfig.description,
+        title: `${typeName} Tattoo Shops - ${siteConfig?.name}`,
+        description: `Discover ${typeName.toLowerCase()} tattoo shops in Portland. ${siteConfig?.description}`,
         alternates: {
             canonical: currentUrl,
         },
@@ -49,44 +37,49 @@ export async function generateMetadata({
 }
 
 export default async function AppListPage({ params }: AppTypePageProps) {
-    console.log('AppListPage, params:', params); // params: { lang: 'en', type: 'new' }
+    console.log('AppListPage, params:', params);
 
     const { lang, type } = params;
-    const queryParams = { ...COMMON_PARAMS, lang };
-    // console.log('AppListPage, language:', lang); // language: en
-    // console.log('AppListPage, queryParams:', queryParams); // queryParams: { defaultLocale: 'en', lang: 'en' }
-
     const category = type;
     console.log('AppListPage, category:', category);
 
-    let applicationListQueryResult: ApplicationListByCategoryQueryResult | ApplicationListOfFeaturedQueryResult | ApplicationListOfRecentQueryResult;
-    if (category === 'featured') {
-        applicationListQueryResult = await sanityFetch<ApplicationListOfFeaturedQueryResult>({
-            query: applicationListOfFeaturedQuery,
-            params: {
-                ...queryParams,
-            }
-        });
-    } else if (category === 'new') { // TODO(javayhu) may not be limited
-        applicationListQueryResult = await sanityFetch<ApplicationListOfRecentQueryResult>({
-            query: applicationListOfRecentQuery,
-            params: {
-                ...queryParams,
-                limit: 24,
-            }
-        });
-    } else {
-        applicationListQueryResult = await sanityFetch<ApplicationListByCategoryQueryResult>({
-            query: applicationListByCategoryQuery,
-            params: {
-                ...queryParams,
-                categorySlug: category 
-            },
-        });
-    }
+    try {
+        let listings;
+        
+        if (category === 'featured') {
+            // Get featured listings
+            listings = await getListingsForUI({ 
+                featured: true,
+                status: 'Published',
+                limit: 24
+            });
+        } else if (category === 'new') {
+            // Get newest listings
+            listings = await getListingsForUI({ 
+                status: 'Published',
+                limit: 24
+            });
+        } else {
+            // Get listings by specific category
+            const categoryName = category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            listings = await getListingsForUI({ 
+                category: categoryName,
+                status: 'Published',
+                limit: 24
+            });
+        }
 
-    return (
-        <ApplicationGridCient lang={lang} itemList={applicationListQueryResult}
-            category={category} />
-    );
+        console.log('AppListPage, found listings:', listings.length);
+
+        return (
+            <ProductGridClient lang={lang} itemList={listings} />
+        );
+    } catch (error) {
+        console.error('Error loading listings:', error);
+        
+        // Return empty state on error
+        return (
+            <ProductGridClient lang={lang} itemList={[]} />
+        );
+    }
 }

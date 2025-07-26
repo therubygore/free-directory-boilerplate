@@ -1,60 +1,61 @@
-import { SubmitAppConfig } from "@/types";
+import { SubmitListingConfig } from "@/types";
 
-const enSubmitAppConfig: SubmitAppConfig = {
-    title: "Submit Application",
-    subtitle: "Submit your indie applications to share",
+const enSubmitListingConfig: SubmitListingConfig = {
+    title: "Submit Tattoo Shop",
+    subtitle: "Add your tattoo shop to the PDX Tattoo Directory",
     form: {
-        title: "Please enter the name and link of the app",
-        name: "Name",
-        namePlaceHolder: "32 characters maximum, example: ChatGPT",
-        link: "Link",
-        linkPlaceHolder: "app website or github repository, example: https://chatgpt.openai.com or https://github.com/openai/chatgpt",
-        submit: "Submit",
-        submiting: "Submiting",
-        desc: "Desc",
-        descPlaceHolder: "256 characters maximum, example: ChatGPT is a large language model",
-        types: "Type",
-        image: "Logo",
-        coverImage: "Cover Image",
-        update: "Update",
-        updating: "Updating...",
-        delete: "Delete",
-        deleting: "Deleting...",
-        imageUploading: "Image Uploading...",
-        notice: "app will be reviewed in 24 hours",
-        success: "Your application has been added.",
+        title: "Please enter your tattoo shop information",
+        name: "Shop Name",
+        namePlaceHolder: "Example: Rose City Tattoo",
+        website: "Website",
+        websitePlaceHolder: "https://yourshop.com",
+        instagram: "Instagram",
+        instagramPlaceHolder: "https://instagram.com/yourshop",
+        bookingUrl: "Booking URL",
+        bookingUrlPlaceHolder: "https://booking.yourshop.com",
+        email: "Email",
+        emailPlaceHolder: "contact@yourshop.com",
+        description: "Description",
+        descriptionPlaceHolder: "Tell us about your shop, specialties, artists, etc.",
+        category: "Category",
+        submit: "Submit Shop",
+        submiting: "Submitting...",
+        notice: "Your shop will be reviewed within 24 hours",
+        success: "Your tattoo shop has been submitted for review!",
         error: "Something went wrong. Please try again.",
     }
 }
 
-const zhSubmitAppConfig: SubmitAppConfig = {
-    title: "提交应用",
-    subtitle: "提交你独立开发的应用",
+const zhSubmitListingConfig: SubmitListingConfig = {
+    title: "提交纹身店",
+    subtitle: "将您的纹身店添加到PDX纹身目录",
     form: {
-        title: "请输入应用的名称和链接",
-        name: "名称",
-        namePlaceHolder: "最多32个字符, 例如: ChatGPT",
-        link: "链接",
-        linkPlaceHolder: "应用网站或者Github链接, 例如: https://chatgpt.openai.com or https://github.com/openai/chatgpt",
-        submit: "提交",
-        submiting: "提交中",
-        desc: "描述",
-        descPlaceHolder: "最多256个字符, 例如: ChatGPT是一个大语言模型",
-        types: "类型",
-        image: "Logo",
-        coverImage: "封面图",
-        update: "更新",
-        updating: "更新中...",
-        delete: "删除",
-        deleting: "删除中...",
-        imageUploading: "图片上传中...",
-        notice: "提交应用将在24小时内出结果",
-        success: "您的应用已添加",
-        error: "出错了, 请重试",
+        title: "请输入您的纹身店信息",
+        name: "店名",
+        namePlaceHolder: "例如: Rose City Tattoo",
+        website: "网站",
+        websitePlaceHolder: "https://yourshop.com",
+        instagram: "Instagram",
+        instagramPlaceHolder: "https://instagram.com/yourshop",
+        bookingUrl: "预约链接",
+        bookingUrlPlaceHolder: "https://booking.yourshop.com",
+        email: "邮箱",
+        emailPlaceHolder: "contact@yourshop.com",
+        description: "描述",
+        descriptionPlaceHolder: "告诉我们您的店铺、专长、纹身师等信息",
+        category: "类别",
+        submit: "提交店铺",
+        submiting: "提交中...",
+        notice: "您的店铺将在24小时内审核",
+        success: "您的纹身店已提交审核！",
+        error: "出错了，请重试",
     }
 }
 
-export const AllSubmitAppConfigs: { [key: string]: SubmitAppConfig } = {
-    en: enSubmitAppConfig,
-    zh: zhSubmitAppConfig,
-}
+export const getAllSubmitConfigs = (): { [key: string]: SubmitListingConfig } => ({
+    en: enSubmitListingConfig,
+    zh: zhSubmitListingConfig,
+})
+
+// For backward compatibility
+export const AllSubmitAppConfigs = getAllSubmitConfigs()

@@ -12,7 +12,7 @@ export default async function MarketingLayout({
   children,
 }: MarketingLayoutProps) {
   const { lang } = params;
-  const navConfig = AllNavConfigs[lang];
+  const navConfig = AllNavConfigs[lang] || AllNavConfigs['en'];
 
   return (
     <div className="min-h-screen flex flex-col">

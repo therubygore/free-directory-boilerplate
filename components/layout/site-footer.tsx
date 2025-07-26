@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils";
 import { SiteFooterInfo } from "@/components/sections/site-footer-info";
 import { AllFooterConfigs } from "@/config/footer";
 import { NavItem, SidebarNavItem } from "@/types";
-import { LanguageSwitcher } from "./language-switcher";
 
 interface SiteFooterProps extends React.HTMLAttributes<HTMLElement> {
   lang: string;
@@ -56,7 +55,6 @@ export function SiteFooter({ className, lang }: SiteFooterProps) {
           </span>
 
           <div className="flex items-center gap-2">
-            <LanguageSwitcher />
             <ModeToggle />
           </div>
         </div>

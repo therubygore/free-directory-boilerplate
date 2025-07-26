@@ -21,9 +21,6 @@ const enFooterConfig: SidebarNavItem[] = [
         title: "Links",
         items: [
             // { title: "Sponsors", external: true, href: "https://buymeacoffee.com/javayhu" },
-            { title: "Mkdirs", external: true, href: "https://mkdirs.com?ref=opensource" },
-            { title: "IndieHub", external: true, href: "https://indiehub.best?ref=opensource" },
-            { title: "Free OG Generator", external: true, href: "https://og.indiehub.best?ref=opensource" },
         ],
     },
 ];

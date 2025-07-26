@@ -33,24 +33,6 @@ const enNavConfig: NavConfig = {
     //   href: "/blog",
     //   path: "/blog",
     // },
-    {
-      title: "IndieHub",
-      href: "https://indiehub.best?ref=opensource",
-      path: "https://indiehub.best?ref=opensource",
-      external: true,
-    },
-    {
-      title: "Mkdirs",
-      href: "https://mkdirs.com?ref=opensource",
-      path: "https://mkdirs.com?ref=opensource",
-      external: true,
-    },
-    {
-      title: "GitHub",
-      href: "https://github.com/javayhu/free-directory-boilerplate",
-      path: "https://github.com/javayhu/free-directory-boilerplate",
-      external: true,
-    },
   ],
 }
 

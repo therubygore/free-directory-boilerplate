@@ -38,3 +38,7 @@ export const AllSettingsConfigs:{[key: string]: AccountSettingsConfig} = {
     en: enSettingsConfig,
     zh: zhSettingsConfig,
 }
+
+export function getAllSettingsConfigs() {
+    return AllSettingsConfigs;
+}

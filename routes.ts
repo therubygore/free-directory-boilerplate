@@ -16,6 +16,7 @@ export const publicRoutes = [
   "/about-zh",
   "/terms",
   "/privacy",
+  "/airtable-test",
 ];
 
 export const restrictedRoutes = [

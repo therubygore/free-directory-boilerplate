@@ -1,0 +1,303 @@
+
+> indie-hackers-site@1.0.0 dev
+> next dev
+
+  ▲ Next.js 14.2.3
+  - Local:        http://localhost:3000
+  - Environments: .env.local
+
+ ✓ Starting...
+Contentlayer config change detected. Updating type definitions and data...
+Generated 24 documents in .contentlayer
+ ✓ Ready in 1737ms
+ ✓ Compiled /middleware in 209ms (294 modules)
+middleware, request url: http://localhost:3000/en/airtable-test
+middleware, next url: http://localhost:3000/en/airtable-test
+middleware, pathname: /en/airtable-test
+middleware, pathnameIsMissingLocale: false
+middleware, locale: en
+middleware, nextUrl: http://localhost:3000/en/airtable-test isLoggedIn: false
+middleware, env.MODE: undefined env.NODE_ENV: undefined
+middleware, nextUrlPathNameWithoutLocale: /airtable-test
+middleware, isRestrictedRoute: false
+middleware, isApiAuthRoute: false
+middleware, isPublicRoute: false
+middleware, redirect to index: /en
+ ✓ Compiled in 113ms (294 modules)
+middleware, request url: http://localhost:3000/en/airtable-test
+middleware, next url: http://localhost:3000/en/airtable-test
+middleware, pathname: /en/airtable-test
+middleware, pathnameIsMissingLocale: false
+middleware, locale: en
+middleware, nextUrl: http://localhost:3000/en/airtable-test isLoggedIn: false
+middleware, env.MODE: undefined env.NODE_ENV: undefined
+middleware, nextUrlPathNameWithoutLocale: /airtable-test
+middleware, isRestrictedRoute: false
+middleware, isApiAuthRoute: false
+middleware, isPublicRoute: true
+middleware, final goto nextUrl: http://localhost:3000/en/airtable-test
+ ○ Compiling /[lang]/airtable-test ...
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ Compiled /[lang]/airtable-test in 2.8s (987 modules)
+ ✓ Compiled in 287ms (445 modules)
+RootLayout, params: { lang: 'en' }
+ModalProvider not mounted
+ ✓ Compiled in 141ms (431 modules)
+ GET /en/airtable-test 200 in 3829ms
+middleware, request url: http://localhost:3000/en/group/featured
+middleware, next url: http://localhost:3000/en/group/featured
+middleware, pathname: /en/group/featured
+middleware, pathnameIsMissingLocale: false
+middleware, locale: en
+middleware, nextUrl: http://localhost:3000/en/group/featured isLoggedIn: false
+middleware, env.MODE: undefined env.NODE_ENV: undefined
+middleware, nextUrlPathNameWithoutLocale: /group/featured
+middleware, isRestrictedRoute: false
+middleware, isApiAuthRoute: false
+middleware, isPublicRoute: true
+middleware, final goto nextUrl: http://localhost:3000/en/group/featured
+ ○ Compiling /[lang]/group/featured ...
+ ⚠ ./app/[lang]/(main)/(product)/group/featured/page.tsx
+Attempted import error: 'getAllSiteConfigs' is not exported from '@/config/site' (imported as 'getAllSiteConfigs').
+
+Import trace for requested module:
+./app/[lang]/(main)/(product)/group/featured/page.tsx
+
+./app/[lang]/(main)/(product)/group/featured/page.tsx
+Attempted import error: 'getAllSiteConfigs' is not exported from '@/config/site' (imported as 'getAllSiteConfigs').
+
+Import trace for requested module:
+./app/[lang]/(main)/(product)/group/featured/page.tsx
+FeaturedPage, params: { lang: 'en' }
+ProductListLayout, params: { lang: 'en' }
+RootLayout, params: { lang: 'en' }
+generateMetadata, lang: en
+ModalProvider not mounted
+ ⨯ app/[lang]/(main)/(product)/group/featured/page.tsx (17:41) @ getAllSiteConfigs
+ ⨯ TypeError: (0 , _config_site__WEBPACK_IMPORTED_MODULE_2__.getAllSiteConfigs) is not a function
+    at Module.generateMetadata (group/featured/page.tsx:19:87)
+digest: "2558389588"
+[0m [90m 15 |[39m     console[33m.[39mlog([32m'generateMetadata, lang:'[39m[33m,[39m lang)[33m;[39m[0m
+[0m [90m 16 |[39m     [0m
+[0m[31m[1m>[22m[39m[90m 17 |[39m     [36mconst[39m siteConfig [33m=[39m getAllSiteConfigs()[lang] [33m||[39m getAllSiteConfigs()[[32m'en'[39m][33m;[39m[0m
+[0m [90m    |[39m                                         [31m[1m^[22m[39m[0m
+[0m [90m 18 |[39m     [36mconst[39m currentUrl [33m=[39m [32m`${siteConfig?.url}/${lang}/featured`[39m[33m;[39m[0m
+[0m [90m 19 |[39m     [36mconst[39m canonicalUrl [33m=[39m [32m`${siteConfig?.url}/en/featured`[39m[33m;[39m[0m
+[0m [90m 20 |[39m[0m
+Error loading featured listings: AirtableError {
+  error: 'INVALID_FILTER_BY_FORMULA',
+  message: 'The formula for filtering records is invalid: Invalid formula. Please check your formula text.',
+  statusCode: 422
+}
+ProductListLayout, categories: 1
+GroupListClient, group: featured , category: undefined
+ ⨯ app/[lang]/(main)/(product)/group/featured/page.tsx (17:41) @ getAllSiteConfigs
+ ⨯ TypeError: (0 , _config_site__WEBPACK_IMPORTED_MODULE_2__.getAllSiteConfigs) is not a function
+    at Module.generateMetadata (group/featured/page.tsx:19:87)
+digest: "2558389588"
+[0m [90m 15 |[39m     console[33m.[39mlog([32m'generateMetadata, lang:'[39m[33m,[39m lang)[33m;[39m[0m
+[0m [90m 16 |[39m     [0m
+[0m[31m[1m>[22m[39m[90m 17 |[39m     [36mconst[39m siteConfig [33m=[39m getAllSiteConfigs()[lang] [33m||[39m getAllSiteConfigs()[[32m'en'[39m][33m;[39m[0m
+[0m [90m    |[39m                                         [31m[1m^[22m[39m[0m
+[0m [90m 18 |[39m     [36mconst[39m currentUrl [33m=[39m [32m`${siteConfig?.url}/${lang}/featured`[39m[33m;[39m[0m
+[0m [90m 19 |[39m     [36mconst[39m canonicalUrl [33m=[39m [32m`${siteConfig?.url}/en/featured`[39m[33m;[39m[0m
+[0m [90m 20 |[39m[0m
+ GET /en/group/featured 200 in 4074ms
+middleware, request url: http://localhost:3000/en/group
+middleware, next url: http://localhost:3000/en/group
+middleware, pathname: /en/group
+middleware, pathnameIsMissingLocale: false
+middleware, locale: en
+middleware, nextUrl: http://localhost:3000/en/group isLoggedIn: false
+middleware, env.MODE: undefined env.NODE_ENV: undefined
+middleware, nextUrlPathNameWithoutLocale: /group
+middleware, isRestrictedRoute: false
+middleware, isApiAuthRoute: false
+middleware, isPublicRoute: true
+middleware, final goto nextUrl: http://localhost:3000/en/group
+ ⚠ ./app/[lang]/(main)/(product)/group/featured/page.tsx
+Attempted import error: 'getAllSiteConfigs' is not exported from '@/config/site' (imported as 'getAllSiteConfigs').
+
+Import trace for requested module:
+./app/[lang]/(main)/(product)/group/featured/page.tsx
+
+./app/[lang]/(main)/(product)/group/featured/page.tsx
+Attempted import error: 'getAllSiteConfigs' is not exported from '@/config/site' (imported as 'getAllSiteConfigs').
+
+Import trace for requested module:
+./app/[lang]/(main)/(product)/group/featured/page.tsx
+ ⚠ ./app/[lang]/(main)/(product)/group/featured/page.tsx
+Attempted import error: 'getAllSiteConfigs' is not exported from '@/config/site' (imported as 'getAllSiteConfigs').
+
+Import trace for requested module:
+./app/[lang]/(main)/(product)/group/featured/page.tsx
+
+./app/[lang]/(main)/(product)/group/featured/page.tsx
+Attempted import error: 'getAllSiteConfigs' is not exported from '@/config/site' (imported as 'getAllSiteConfigs').
+
+Import trace for requested module:
+./app/[lang]/(main)/(product)/group/featured/page.tsx
+ProductListLayout, params: { lang: 'en' }
+RootLayout, params: { lang: 'en' }
+ModalProvider not mounted
+ProductListLayout, categories: 1
+GroupListClient, group: undefined , category: undefined
+GroupListClient, group: undefined , category: undefined
+ GET /en/group 200 in 1273ms
+ ✓ Compiled /[lang]/group in 297ms (2013 modules)
+ ✓ Compiled in 164ms (1518 modules)
+ ✓ Compiled in 173ms (1518 modules)
+middleware, request url: http://localhost:3000/en/group/featured
+middleware, next url: http://localhost:3000/en/group/featured
+middleware, pathname: /en/group/featured
+middleware, pathnameIsMissingLocale: false
+middleware, locale: en
+middleware, nextUrl: http://localhost:3000/en/group/featured isLoggedIn: false
+middleware, env.MODE: undefined env.NODE_ENV: undefined
+middleware, nextUrlPathNameWithoutLocale: /group/featured
+middleware, isRestrictedRoute: false
+middleware, isApiAuthRoute: false
+middleware, isPublicRoute: true
+middleware, final goto nextUrl: http://localhost:3000/en/group/featured
+FeaturedPage, params: { lang: 'en' }
+ProductListLayout, params: { lang: 'en' }
+RootLayout, params: { lang: 'en' }
+generateMetadata, lang: en
+ModalProvider not mounted
+ProductListLayout, categories: 1
+GroupListClient, group: featured , category: undefined
+Error loading featured listings: AirtableError {
+  error: 'INVALID_FILTER_BY_FORMULA',
+  message: 'The formula for filtering records is invalid: Invalid formula. Please check your formula text.',
+  statusCode: 422
+}
+ GET /en/group/featured 200 in 714ms
+ ✓ Compiled in 793ms (2027 modules)
+middleware, request url: http://localhost:3000/en/group/featured
+middleware, next url: http://localhost:3000/en/group/featured
+middleware, pathname: /en/group/featured
+middleware, pathnameIsMissingLocale: false
+middleware, locale: en
+middleware, nextUrl: http://localhost:3000/en/group/featured isLoggedIn: false
+middleware, env.MODE: undefined env.NODE_ENV: undefined
+middleware, nextUrlPathNameWithoutLocale: /group/featured
+middleware, isRestrictedRoute: false
+middleware, isApiAuthRoute: false
+middleware, isPublicRoute: true
+middleware, final goto nextUrl: http://localhost:3000/en/group/featured
+FeaturedPage, params: { lang: 'en' }
+ProductListLayout, params: { lang: 'en' }
+RootLayout, params: { lang: 'en' }
+generateMetadata, lang: en
+ModalProvider not mounted
+FeaturedPage, featured listings: 1
+ProductListLayout, categories: 1
+GroupListClient, group: featured , category: undefined
+ProductGridClient, no cover image for  Test
+ GET /en/group/featured 200 in 749ms
+ ✓ Compiled in 208ms (509 modules)
+middleware, request url: http://localhost:3000/en/apptype/new
+middleware, next url: http://localhost:3000/en/apptype/new
+middleware, pathname: /en/apptype/new
+middleware, pathnameIsMissingLocale: false
+middleware, locale: en
+middleware, nextUrl: http://localhost:3000/en/apptype/new isLoggedIn: false
+middleware, env.MODE: undefined env.NODE_ENV: undefined
+middleware, nextUrlPathNameWithoutLocale: /apptype/new
+middleware, isRestrictedRoute: false
+middleware, isApiAuthRoute: false
+middleware, isPublicRoute: true
+middleware, final goto nextUrl: http://localhost:3000/en/apptype/new
+ ○ Compiling /[lang]/apptype/[type] ...
+ ✓ Compiled /[lang]/apptype/[type] in 572ms (2039 modules)
+ ⨯ Error: Cannot find module './vendor-chunks/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1.js'
+Require stack:
+- /Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/.next/server/webpack-runtime.js
+- /Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/.next/server/app/[lang]/(main)/(indieapp)/apptype/[type]/page.js
+- /Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/require.js
+- /Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/load-components.js
+- /Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/build/utils.js
+- /Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1140:15)
+    at /Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/require-hook.js:55:36
+    at Module._load (node:internal/modules/cjs/loader:981:27)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at mod.require (/Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:177:18)
+    at __webpack_require__.f.require (/Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/.next/server/webpack-runtime.js:208:28)
+    at /Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/.next/server/webpack-runtime.js:116:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/.next/server/webpack-runtime.js:115:67) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/.next/server/webpack-runtime.js',
+    '/Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/.next/server/app/[lang]/(main)/(indieapp)/apptype/[type]/page.js',
+    '/Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/require.js',
+    '/Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/load-components.js',
+    '/Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/build/utils.js',
+    '/Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/dev/static-paths-worker.js',
+    '/Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/compiled/jest-worker/processChild.js'
+  ],
+  page: '/en/apptype/new'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 522ms (2263 modules)
+ GET /en/apptype/new 500 in 1396ms
+middleware, request url: http://localhost:3000/
+middleware, next url: http://localhost:3000/
+middleware, pathname: /
+middleware, pathnameIsMissingLocale: true
+middleware, locale: en
+middleware, redirectUrl: /en/
+middleware, request url: http://localhost:3000/en
+middleware, next url: http://localhost:3000/en
+middleware, pathname: /en
+middleware, pathnameIsMissingLocale: false
+middleware, locale: en
+middleware, nextUrl: http://localhost:3000/en isLoggedIn: false
+middleware, env.MODE: undefined env.NODE_ENV: undefined
+middleware, nextUrlPathNameWithoutLocale: /
+middleware, isRestrictedRoute: false
+middleware, isApiAuthRoute: false
+middleware, isPublicRoute: true
+middleware, final goto nextUrl: http://localhost:3000/en
+ ✓ Compiled /[lang] in 251ms (2265 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⨯ Error: Cannot find module './vendor-chunks/zod@3.23.8.js'
+Require stack:
+- /Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/.next/server/webpack-runtime.js
+- /Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/.next/server/app/[lang]/(main)/page.js
+- /Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/require.js
+- /Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/load-components.js
+- /Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/build/utils.js
+- /Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1140:15)
+    at /Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/require-hook.js:55:36
+    at Module._load (node:internal/modules/cjs/loader:981:27)
+    at Module.require (node:internal/modules/cjs/loader:1231:19)
+    at mod.require (/Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:177:18)
+    at __webpack_require__.f.require (/Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/.next/server/webpack-runtime.js:208:28)
+    at /Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/.next/server/webpack-runtime.js:116:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/.next/server/webpack-runtime.js:115:67) {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/.next/server/webpack-runtime.js',
+    '/Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/.next/server/app/[lang]/(main)/page.js',
+    '/Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/require.js',
+    '/Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/load-components.js',
+    '/Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/build/utils.js',
+    '/Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/server/dev/static-paths-worker.js',
+    '/Users/rubygore/Documents/code-projects/pdx-tattoo-directory/boilerplate/node_modules/.pnpm/next@14.2.3_@babel+core@7.25.2_@opentelemetry+api@1.9.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/compiled/jest-worker/processChild.js'
+  ],
+  page: '/en'
+}
+ GET /en 500 in 451ms
+[?25h

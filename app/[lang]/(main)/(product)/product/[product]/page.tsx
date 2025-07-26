@@ -1,13 +1,9 @@
 import { notFound } from "next/navigation";
 
 import ProductSingleClient from "@/components/product-single-client";
-import { COMMON_PARAMS } from "@/lib/constants";
-import { ProductQueryResult } from "@/sanity.types";
-import { sanityFetch } from "@/sanity/lib/fetch";
-import { productQuery } from "@/sanity/lib/queries";
+import { getListingForUIBySlug } from "@/lib/airtable";
 import { Metadata } from "next";
-import { urlForImageWithSize } from "@/sanity/lib/utils";
-import { AllSiteConfigs } from "@/config/site";
+import { getAllSiteConfigs } from "@/config/site";
 
 interface ProductPageProps {
     params: {
@@ -16,76 +12,70 @@ interface ProductPageProps {
     }
 }
 
-// https://nextjs.org/docs/app/api-reference/functions/generate-metadata
+// Generate metadata for the product page
 export async function generateMetadata({
     params,
 }: ProductPageProps): Promise<Metadata> {
     const { lang, product } = params;
     console.log('generateMetadata, lang:', lang, ', product:', product);
-    const queryParams = { ...COMMON_PARAMS, lang };
-    // console.log('generateMetadata, queryParams:', queryParams); // queryParams: { defaultLocale: 'en', lang: 'en' }
 
-    const productQueryResult = await sanityFetch<ProductQueryResult>({
-        query: productQuery,
-        params: {
-            ...queryParams,
-            slug: product,
-        },
-    });
-    // console.log('ProductPage, productQueryResult:', productQueryResult);
-    if (!productQueryResult) {
+    try {
+        const listing = await getListingForUIBySlug(product);
+        console.log('ProductPage, listing:', listing);
+        
+        if (!listing) {
+            return {};
+        }
+
+        const siteConfig = getAllSiteConfigs()[lang] || getAllSiteConfigs()['en'];
+        const currentUrl = `${siteConfig?.url}/${lang}/listing/${listing.slug}`;
+        const canonicalUrl = `${siteConfig?.url}/en/listing/${listing.slug}`;
+
+        return {
+            title: `${listing.name} - ${siteConfig?.name}`,
+            description: listing.desc || `${listing.name} tattoo shop in Portland`,
+            alternates: {
+                canonical: canonicalUrl,
+            },
+            openGraph: {
+                type: "website",
+                url: currentUrl,
+                title: listing.name,
+                images: listing.coverImage?.url ? [listing.coverImage.url] : [],
+                description: listing.desc || `${listing.name} tattoo shop in Portland`,
+            },
+            twitter: {
+                site: currentUrl,
+                card: "summary_large_image",
+                title: listing.name,
+                description: listing.desc || `${listing.name} tattoo shop in Portland`,
+                images: listing.coverImage?.url ? [listing.coverImage.url] : [],
+            },
+        }
+    } catch (error) {
+        console.error('Error generating metadata:', error);
         return {};
-    }
-
-    const siteConfig = AllSiteConfigs[lang];
-    const currentUrl = `${siteConfig.url}/${lang}/product/${productQueryResult.slug}`;
-    const canonicalUrl = `${siteConfig.url}/en/product/${productQueryResult.slug}`;
-    const ogImage = urlForImageWithSize(productQueryResult.coverImage, 960, 540);
-
-    return {
-        title: productQueryResult.name,
-        description: productQueryResult.desc,
-        alternates: {
-            canonical: canonicalUrl,
-        },
-        openGraph: {
-            type: "website",
-            url: currentUrl,
-            title: productQueryResult.name,
-            images: [ogImage],
-            description: productQueryResult.desc,
-        },
-        twitter: {
-            site: currentUrl,
-            card: "summary_large_image",
-            title: productQueryResult.name,
-            description: productQueryResult.desc,
-            images: [ogImage],
-        },
     }
 }
 
-// https://nextjs.org/learn/dashboard-app/streaming
-// use loading.tsx instead of suspense here
+// Individual tattoo shop page
 export default async function ProductPage({ params }: ProductPageProps) {
     const { lang, product } = params;
     console.log('ProductPage, lang:', lang, ', product', product);
-    const queryParams = { ...COMMON_PARAMS, lang };
-    // console.log('ProductPage, queryParams:', queryParams); // queryParams: { defaultLocale: 'en', lang: 'en' }
 
-    const productQueryResult = await sanityFetch<ProductQueryResult>({
-        query: productQuery,
-        params: {
-            ...queryParams,
-            slug: product,
-        },
-    });
-    // console.log('ProductPage, productQueryResult:', productQueryResult);
-    if (!productQueryResult) {
+    try {
+        const listing = await getListingForUIBySlug(product);
+        console.log('ProductPage, listing:', listing);
+        
+        if (!listing) {
+            return notFound();
+        }
+
+        return (
+            <ProductSingleClient lang={lang} product={listing} />
+        );
+    } catch (error) {
+        console.error('Error loading listing:', error);
         return notFound();
     }
-
-    return (
-        <ProductSingleClient lang={lang} product={productQueryResult} />
-    )
 }
